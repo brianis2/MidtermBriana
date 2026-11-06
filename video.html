@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube</title>
+    <link rel="stylesheet" href="estilos.css" />
+  </head>
+
+  <body>
+    <header>
+      <p class="menu">☰</p>
+      <a href="index.html">
+        <img class="logo" src="https://midtermvideobrianis.s3.us-east-1.amazonaws.com/Assests/imagenes/logo.webp" alt="Logo YouTube" />
+      </a>
+      <input type="text" placeholder="Buscar" />
+      <img class="foto_usuario" src="https://midtermvideobrianis.s3.us-east-1.amazonaws.com/Assests/imagenes/yopi.webp" alt="Mi perfil" />
+    </header>
+
+    <div class="contenedor_video">
+      <main id="video_principal">
+        <article>
+          <video id="reproductor" autoplay controls></video>
+
+          <h2 id="titulo" class="titulo_grande"></h2>
+
+          <div class="fila">
+            <img class="imagen_perfil" src="https://midtermvideobrianis.s3.us-east-1.amazonaws.com/Assests/imagenes/perfil.webp" alt="perfil" />
+            <p id="categoria" class="canal"></p>
+            <button class="boton_suscribirse">Suscribirse</button>
+          </div>
+
+          <p id="descripcion" class="descripcion"></p>
+        </article>
+
+        <section id="comentarios">
+          <h3>Comentarios</h3>
+          <form id="formulario">
+            <input id="autor" type="text" placeholder="Tu nombre" required />
+            <input id="texto" type="text" placeholder="Escribe un comentario" required />
+            <button type="submit">Comentar</button>
+          </form>
+          <ul id="lista_comentarios"></ul>
+        </section>
+      </main>
+
+      <aside id="otros_videos">
+        <h3>Recomendados</h3>
+      </aside>
+    </div>
+
+    <footer>
+      <p>YouTube - Proyecto de Programación Web y Multimedia</p>
+      <p>Hecho por Briana Amores</p>
+      <a href="index.html">Volver al inicio</a>
+    </footer>
+
+    <script>
+      const API = "http://localhost:8000";
+      const id = window.location.search.replace("?id=", "");
+
+      fetch(API + "/videos/" + id)
+        .then(function (respuesta) {
+          return respuesta.json();
+        })
+        .then(function (video) {
+          document.getElementById("reproductor").src = video.source;
+          document.getElementById("reproductor").poster = video.miniatura;
+          document.getElementById("titulo").textContent = video.titulo;
+          document.getElementById("categoria").textContent = video.categoria;
+          document.getElementById("descripcion").textContent = video.descripcion;
+        });
+
+      function mostrarComentario(comentario) {
+        const item = document.createElement("li");
+        item.className = "comentario";
+
+        const autor = document.createElement("strong");
+        autor.textContent = comentario.autor;
+
+        const texto = document.createElement("p");
+        texto.textContent = comentario.texto;
+
+        item.appendChild(autor);
+        item.appendChild(texto);
+        return item;
+      }
+
+      fetch(API + "/videos/" + id + "/comentarios")
+        .then(function (respuesta) {
+          return respuesta.json();
+        })
+        .then(function (comentarios) {
+          comentarios.forEach(function (comentario) {
+            document.getElementById("lista_comentarios").appendChild(mostrarComentario(comentario));
+          });
+        });
+
+      document.getElementById("formulario").addEventListener("submit", function (evento) {
+        evento.preventDefault();
+
+        const datos = {
+          autor: document.getElementById("autor").value,
+          texto: document.getElementById("texto").value,
+        };
+
+        fetch(API + "/videos/" + id + "/comentarios", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(datos),
+        })
+          .then(function (respuesta) {
+            return respuesta.json();
+          })
+          .then(function (comentario) {
+            document.getElementById("lista_comentarios").prepend(mostrarComentario(comentario));
+            document.getElementById("texto").value = "";
+          });
+      });
+
+      fetch(API + "/videos/" + id + "/recomendaciones")
+        .then(function (respuesta) {
+          return respuesta.json();
+        })
+        .then(function (videos) {
+          const contenedor = document.getElementById("otros_videos");
+
+          videos.forEach(function (video) {
+            const articulo = document.createElement("article");
+            const enlace = document.createElement("a");
+            const imagen = document.createElement("img");
+            const textos = document.createElement("div");
+            const titulo = document.createElement("h2");
+            const canal = document.createElement("p");
+
+            articulo.className = "video_lado";
+            enlace.href = "video.html?id=" + video.id;
+            imagen.src = video.miniatura;
+            textos.className = "orden";
+            titulo.className = "titulo_video";
+            titulo.textContent = video.titulo;
+            canal.className = "canal";
+            canal.textContent = video.categoria;
+
+            enlace.appendChild(imagen);
+            textos.appendChild(titulo);
+            textos.appendChild(canal);
+            articulo.appendChild(enlace);
+            articulo.appendChild(textos);
+            contenedor.appendChild(articulo);
+          });
+        });
+    </script>
+  </body>
+</html>

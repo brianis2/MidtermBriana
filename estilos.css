@@ -1,0 +1,303 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: white;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  gap: 12px;
+}
+
+.menu {
+  font-size: 25px;
+  margin: 0;
+}
+
+.logo {
+  width: 90px;
+}
+
+header input {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  border: 1px solid #cccccc;
+  border-radius: 20px;
+  padding-left: 15px;
+  font-size: 16px;
+}
+
+.foto_usuario {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+nav {
+  display: none;
+}
+
+main {
+  padding: 15px;
+}
+
+#categorias {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin-bottom: 15px;
+}
+
+.categoria {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  background-color: #eeeeee;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.categoria:hover {
+  background-color: black;
+  color: white;
+  transform: translateY(-3px);
+}
+
+#lista_videos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.video {
+  animation: aparecer 0.5s ease;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.miniatura {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 10px;
+  transition: transform 0.3s;
+}
+
+.miniatura:hover {
+  transform: scale(1.04);
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+}
+
+.imagen_perfil {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 8px;
+  margin-right: 8px;
+}
+
+.orden {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+}
+
+.titulo_video {
+  font-size: 16px;
+  margin: 0;
+}
+
+.canal {
+  font-size: 14px;
+  color: #606060;
+  margin-top: 4px;
+}
+
+.contenedor_video {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+#video_principal video {
+  width: 100%;
+  border-radius: 10px;
+  background-color: black;
+}
+
+.titulo_grande {
+  font-size: 20px;
+  margin: 10px 0 0;
+}
+
+.boton_suscribirse {
+  height: 38px;
+  margin-left: auto;
+  margin-top: 8px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 20px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.boton_suscribirse:hover {
+  transform: scale(1.1);
+}
+
+.descripcion {
+  background-color: #eeeeee;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+#formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#formulario input {
+  border: none;
+  border-bottom: 1px solid #cccccc;
+  padding: 8px;
+  font-size: 15px;
+}
+
+#formulario button {
+  align-self: flex-end;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 18px;
+  background-color: #065fd4;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+#formulario button:hover {
+  transform: scale(1.1);
+}
+
+#lista_comentarios {
+  padding: 0;
+}
+
+.comentario {
+  list-style: none;
+  margin-bottom: 12px;
+  animation: aparecer 0.5s ease;
+}
+
+.comentario p {
+  margin: 4px 0 0;
+}
+
+#otros_videos {
+  padding: 15px;
+}
+
+.video_lado {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  animation: aparecer 0.5s ease;
+}
+
+.video_lado img {
+  width: 160px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s;
+}
+
+.video_lado img:hover {
+  transform: scale(1.05);
+}
+
+.video_lado .orden {
+  margin-top: 0;
+}
+
+footer {
+  text-align: center;
+  color: #606060;
+  padding: 20px;
+}
+
+@media (min-width: 600px) {
+  .logo {
+    width: 110px;
+  }
+
+  header input {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  #lista_videos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .contenedor {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+  }
+
+  nav {
+    display: block;
+    padding: 15px;
+  }
+
+  nav ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  nav li {
+    list-style: none;
+    padding: 10px;
+    margin-bottom: 3px;
+    border-radius: 8px;
+  }
+
+  .activo {
+    background-color: #eeeeee;
+  }
+
+  #lista_videos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .contenedor_video {
+    grid-template-columns: 2fr 1fr;
+  }
+}

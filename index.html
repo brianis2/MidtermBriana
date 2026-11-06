@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube</title>
+    <link rel="stylesheet" href="estilos.css" />
+  </head>
+
+  <body>
+    <header>
+      <p class="menu">☰</p>
+      <a href="index.html">
+        <img class="logo" src="https://midtermvideobrianis.s3.us-east-1.amazonaws.com/Assests/imagenes/logo.webp" alt="Logo YouTube" />
+      </a>
+      <input type="text" placeholder="Buscar" />
+      <img class="foto_usuario" src="https://midtermvideobrianis.s3.us-east-1.amazonaws.com/Assests/imagenes/yopi.webp" alt="Mi perfil" />
+    </header>
+
+    <div class="contenedor">
+      <nav>
+        <ul>
+          <li class="activo"><a href="index.html">Página principal</a></li>
+        </ul>
+        <hr />
+        <ul>
+          <li>Shorts</li>
+          <li>Suscripciones</li>
+          <li>Historial</li>
+          <li>Configuraciones</li>
+        </ul>
+      </nav>
+
+      <main>
+        <section id="categorias"></section>
+        <section id="lista_videos"></section>
+      </main>
+    </div>
+
+    <footer>
+      <p>YouTube - Proyecto de Programación Web y Multimedia</p>
+      <p>Hecho por Briana Amores</p>
+    </footer>
+
+    <script>
+      const API = "http://localhost:8000";
+      const S3 = "https://midtermvideobrianis.s3.us-east-1.amazonaws.com";
+
+      function cargarVideos(categoria) {
+        fetch(API + "/videos/?categoria=" + categoria)
+          .then(function (respuesta) {
+            return respuesta.json();
+          })
+          .then(function (videos) {
+            const contenedor = document.getElementById("lista_videos");
+            contenedor.replaceChildren();
+
+            videos.forEach(function (video) {
+              const articulo = document.createElement("article");
+              const enlace = document.createElement("a");
+              const imagen = document.createElement("img");
+              const fila = document.createElement("div");
+              const perfil = document.createElement("img");
+              const textos = document.createElement("div");
+              const titulo = document.createElement("h2");
+              const canal = document.createElement("p");
+
+              articulo.className = "video";
+              enlace.href = "video.html?id=" + video.id;
+              imagen.className = "miniatura";
+              imagen.src = video.miniatura;
+              fila.className = "fila";
+              perfil.className = "imagen_perfil";
+              perfil.src = S3 + "/Assests/imagenes/perfil.webp";
+              textos.className = "orden";
+              titulo.className = "titulo_video";
+              titulo.textContent = video.titulo;
+              canal.className = "canal";
+              canal.textContent = video.categoria;
+
+              enlace.appendChild(imagen);
+              textos.appendChild(titulo);
+              textos.appendChild(canal);
+              fila.appendChild(perfil);
+              fila.appendChild(textos);
+              articulo.appendChild(enlace);
+              articulo.appendChild(fila);
+              contenedor.appendChild(articulo);
+            });
+          });
+      }
+
+      function crearBoton(texto, categoria) {
+        const boton = document.createElement("button");
+        boton.className = "categoria";
+        boton.textContent = texto;
+        boton.addEventListener("click", function () {
+          cargarVideos(categoria);
+        });
+        document.getElementById("categorias").appendChild(boton);
+      }
+
+      fetch(API + "/videos/categorias")
+        .then(function (respuesta) {
+          return respuesta.json();
+        })
+        .then(function (categorias) {
+          crearBoton("Todos", "");
+          categorias.forEach(function (categoria) {
+            crearBoton(categoria, categoria);
+          });
+        });
+
+      cargarVideos("");
+    </script>
+  </body>
+</html>
